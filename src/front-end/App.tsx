@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import type { Movie } from "../back-end/schemas/MoviesTypes"
+import MovieItem from "./components/MovieItem"
 
 export default function App() {
   // State to hold the fetched movies data, initialized to null
