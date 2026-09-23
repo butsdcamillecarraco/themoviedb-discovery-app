@@ -1,6 +1,9 @@
 import express from 'express';
 import { tmdbAccessToken } from './config';
-import { MoviesApiResponse, TmdbMoviesRawResponse } from './schemas/MoviesTypes';
+import {
+  TmdbMoviesRawResponse,
+  MoviesApiResponse,
+} from './schemas/MoviesTypes';
 import { toSupportedMovie } from './utils';
 import { DEFAULT_LANGUAGE, DEFAULT_PAGE, DEFAULT_REGION } from './constants';
 
