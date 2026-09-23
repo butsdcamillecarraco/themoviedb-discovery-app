@@ -28,4 +28,3 @@ The commit message should be concise and to the point, ideally no more than 72 c
 - Types autorisés : feat, fix, docs, style, refactor, test, chore.
 - Format : `<type>: <message en anglais>`.
 - Exemple : "feat: add new feature to the application"
-
