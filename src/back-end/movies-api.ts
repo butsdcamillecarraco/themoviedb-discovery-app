@@ -51,4 +51,39 @@ export function registerMoviesApi(app: Express): void {
       }
     },
   );
+  app.get(
+    '/api/movies/:id',
+    async (req: express.Request, res: express.Response) => {
+      const { id } = req.params;
+      const { language } = req.query;
+
+      // Create a URLSearchParams object to build the query string for the TMDB API request
+      const queryParams = new URLSearchParams();
+      queryParams.append('language', (language as string) || DEFAULT_LANGUAGE);
+
+      try {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/${id}?${queryParams.toString()}`,
+          {
+            headers: {
+              Authorization: `Bearer ${tmdbAccessToken}`,
+              'Content-Type': 'application/json;charset=utf-8',
+            },
+          },
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            `TMDB API request failed with status ${response.status}`,
+          );
+        }
+
+        const rawData = await response.json();
+        res.json(rawData);
+      } catch (error) {
+        console.error(`Error fetching movie details for ID ${id}:`, error);
+        res.status(500).json({ error: 'Failed to fetch movie details' });
+      }
+    },
+  );
 }
