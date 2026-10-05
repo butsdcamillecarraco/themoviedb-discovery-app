@@ -17,6 +17,20 @@ body {
   background: linear-gradient(112deg, #fff1c9 0%, #fbf6e8 48%, #cdeeff 100%);
 }
 
+#root,
+.app-layout {
+  min-height: 100vh;
+}
+
+.app-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-layout > :nth-child(2) {
+  flex: 1;
+}
+
 img {
   display: block;
   max-width: 100%;
