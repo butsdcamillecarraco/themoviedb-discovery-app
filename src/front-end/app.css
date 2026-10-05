@@ -26,6 +26,21 @@
   line-height: 1.45;
 }
 
+.movie-detail-header {
+  margin-bottom: 24px;
+}
+
+.movie-detail-header h1 {
+  margin: 0 0 6px;
+  font-size: 2.6rem;
+  line-height: 1.05;
+}
+
+.movie-detail-header a {
+  color: #653f8f;
+  font-weight: 700;
+}
+
 /* Movie grid */
 .movie-grid {
   display: grid;
