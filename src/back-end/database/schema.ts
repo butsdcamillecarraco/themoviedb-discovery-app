@@ -132,7 +132,7 @@ export function initializeGenresSchema(database: DatabaseSync): void {
  * Initializes the countries table schema.
  * @param database The SQLite database to initialize.
  */
-function initializeCountriesSchema(database: DatabaseSync): void {
+export function initializeCountriesSchema(database: DatabaseSync): void {
   database.exec(`
     CREATE TABLE IF NOT EXISTS countries (
       -- The unique code for the country
