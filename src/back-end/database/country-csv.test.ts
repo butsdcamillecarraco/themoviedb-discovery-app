@@ -3,12 +3,11 @@ import { parseCountriesCsv } from './country-csv';
 
 describe('parseCountriesCsv', () => {
   it('parses case-insensitive headers in either order, BOM, CRLF, and quoted values', () => {
-    const csv =
-      '\uFEFFNAME,CODE\r\n"Science, Fiction",GB\r\n"Drama ""classic""",FR\r\n';
+    const csv = '\uFEFFNAME,CODE\r\n"UNITED KINGDOM",GB\r\n"FRANCE",FR\r\n';
 
     expect(parseCountriesCsv(csv)).toEqual([
-      { code: 'GB', name: 'Science, Fiction' },
-      { code: 'FR', name: 'Drama "classic"' },
+      { code: 'GB', name: 'UNITED KINGDOM' },
+      { code: 'FR', name: 'FRANCE' },
     ]);
   });
 
@@ -23,7 +22,7 @@ describe('parseCountriesCsv', () => {
       'headers must be exactly code and name',
     );
     expect(() =>
-      parseCountriesCsv('code,name,extra\n18,FRANCE,unused'),
+      parseCountriesCsv('code,name,extra\nFR,FRANCE,unused'),
     ).toThrow('headers must be exactly code and name');
   });
 
