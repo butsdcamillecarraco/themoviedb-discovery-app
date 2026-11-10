@@ -38,12 +38,12 @@ describe('country repository', () => {
     try {
       upsertCountries(database, [
         { code: 'FR', name: 'FRANCE' },
-        { code: 'ALL', name: 'ALLEMAGNE' },
+        { code: 'GB', name: 'UNITED KINGDOM' },
       ]);
 
       expect(listCountries(database)).toEqual([
-        { code: 'ALL', name: 'ALLEMAGNE' },
         { code: 'FR', name: 'FRANCE' },
+        { code: 'GB', name: 'UNITED KINGDOM' },
       ]);
     } finally {
       database.close();
@@ -54,12 +54,12 @@ describe('country repository', () => {
     const database = createDatabase();
     try {
       upsertCountries(database, [
-        { code: 'ALL', name: 'ALLEMAGNE' },
-        { code: 'ALL', name: 'ALLEMAGNE' },
+        { code: 'GB', name: 'UNITED KINGDOM' },
+        { code: 'GB', name: 'UNITED KINGDOM' },
       ]);
 
       expect(listCountries(database)).toEqual([
-        { code: 'ALL', name: 'ALLEMAGNE' },
+        { code: 'GB', name: 'UNITED KINGDOM' },
       ]);
     } finally {
       database.close();
@@ -69,14 +69,14 @@ describe('country repository', () => {
   it('accepts arrays and other iterables, and leaves data unchanged for an empty iterable', () => {
     const database = createDatabase();
     try {
-      const Countrys: Country[] = [{ code: 'ALL', name: 'ALLEMAGNE' }];
+      const Countrys: Country[] = [{ code: 'GB', name: 'UNITED KINGDOM' }];
       upsertCountries(database, Countrys);
       upsertCountries(database, new Set([{ code: 'FR', name: 'FRANCE' }]));
       upsertCountries(database, []);
 
       expect(listCountries(database)).toEqual([
-        { code: 'ALL', name: 'ALLEMAGNE' },
         { code: 'FR', name: 'FRANCE' },
+        { code: 'GB', name: 'UNITED KINGDOM' },
       ]);
     } finally {
       database.close();
@@ -87,7 +87,7 @@ describe('country repository', () => {
     const database = createDatabase();
     try {
       expect(() =>
-        upsertCountries(database, [{ code: 'ALL', name: null as never }]),
+        upsertCountries(database, [{ code: 'GB', name: null as never }]),
       ).toThrow(/NOT NULL constraint failed/);
     } finally {
       database.close();

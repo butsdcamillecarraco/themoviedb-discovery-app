@@ -43,19 +43,12 @@ export function parseCountriesCsv(csv: string): Country[] {
 
   return rows.slice(1).map((row, rowIndex) => {
     const lineNumber = rowIndex + 2;
-    const idValue = row[idIndex];
+    const code = row[idIndex].trim();
     const nameValue = row[nameIndex];
 
-    if (!/^[1-9]\d*$/.test(idValue)) {
+    if (code === '') {
       throw new Error(
-        `Invalid countries CSV at line ${lineNumber}: code must be a positive safe integer`,
-      );
-    }
-
-    const id = Number(idValue);
-    if (!Number.isSafeInteger(id)) {
-      throw new Error(
-        `Invalid countries CSV at line ${lineNumber}: code must be a positive safe integer`,
+        `Invalid countries CSV at line ${lineNumber}: code must not be empty`,
       );
     }
 
@@ -65,6 +58,6 @@ export function parseCountriesCsv(csv: string): Country[] {
       );
     }
 
-    return { code: id, name: nameValue };
+    return { code, name: nameValue };
   });
 }

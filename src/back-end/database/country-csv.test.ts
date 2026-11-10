@@ -1,50 +1,47 @@
 import { describe, expect, it } from 'vitest';
-import { parseGenresCsv } from './genre-csv';
+import { parseCountriesCsv } from './country-csv';
 
-describe('parseGenresCsv', () => {
+describe('parseCountriesCsv', () => {
   it('parses case-insensitive headers in either order, BOM, CRLF, and quoted values', () => {
     const csv =
-      '\uFEFFNAME,ID\r\n"Science, Fiction",878\r\n"Drama ""classic""",18\r\n';
+      '\uFEFFNAME,CODE\r\n"Science, Fiction",GB\r\n"Drama ""classic""",FR\r\n';
 
-    expect(parseGenresCsv(csv)).toEqual([
-      { id: 878, name: 'Science, Fiction' },
-      { id: 18, name: 'Drama "classic"' },
+    expect(parseCountriesCsv(csv)).toEqual([
+      { code: 'GB', name: 'Science, Fiction' },
+      { code: 'FR', name: 'Drama "classic"' },
     ]);
   });
 
   it('ignores empty lines', () => {
-    expect(parseGenresCsv('id,name\n\n18,Drama\n\n')).toEqual([
-      { id: 18, name: 'Drama' },
+    expect(parseCountriesCsv('code,name\n\nFR,FRANCE\n\n')).toEqual([
+      { code: 'FR', name: 'FRANCE' },
     ]);
   });
 
   it('rejects invalid headers', () => {
-    expect(() => parseGenresCsv('id,label\n18,Drama')).toThrow(
-      'headers must be exactly id and name',
+    expect(() => parseCountriesCsv('code,label\nFRANCE,France')).toThrow(
+      'headers must be exactly code and name',
     );
-    expect(() => parseGenresCsv('id,name,extra\n18,Drama,unused')).toThrow(
-      'headers must be exactly id and name',
-    );
+    expect(() =>
+      parseCountriesCsv('code,name,extra\n18,FRANCE,unused'),
+    ).toThrow('headers must be exactly code and name');
   });
 
-  it('rejects invalid identifiers and empty names', () => {
-    expect(() => parseGenresCsv('id,name\n0,Drama')).toThrow(
-      'id must be a positive safe integer',
+  it('rejects empty codes and names', () => {
+    expect(() => parseCountriesCsv('code,name\n,FRANCE')).toThrow(
+      'code must not be empty',
     );
-    expect(() => parseGenresCsv('id,name\n9007199254740992,Drama')).toThrow(
-      'id must be a positive safe integer',
-    );
-    expect(() => parseGenresCsv('id,name\n18,   ')).toThrow(
+    expect(() => parseCountriesCsv('code,name\nFR,   ')).toThrow(
       'name must not be empty',
     );
   });
 
   it('rejects malformed CSV and missing headers', () => {
-    expect(() => parseGenresCsv('id,name\n18,"Drama')).toThrow(
-      'Invalid genres CSV:',
+    expect(() => parseCountriesCsv('code,name\nFR,"France')).toThrow(
+      'Invalid countries CSV:',
     );
-    expect(() => parseGenresCsv('')).toThrow(
-      'the id and name headers are required',
+    expect(() => parseCountriesCsv('')).toThrow(
+      'the code and name headers are required',
     );
   });
 });
