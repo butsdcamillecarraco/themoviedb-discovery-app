@@ -42,8 +42,8 @@ describe('country repository', () => {
       ]);
 
       expect(listCountries(database)).toEqual([
-        { code: 'GB', name: 'UNITED KINGDOM' },
         { code: 'FR', name: 'FRANCE' },
+        { code: 'GB', name: 'UNITED KINGDOM' },
       ]);
     } finally {
       database.close();
@@ -75,8 +75,8 @@ describe('country repository', () => {
       upsertCountries(database, []);
 
       expect(listCountries(database)).toEqual([
-        { code: 'GB', name: 'UNITED KINGDOM' },
         { code: 'FR', name: 'FRANCE' },
+        { code: 'GB', name: 'UNITED KINGDOM' },
       ]);
     } finally {
       database.close();
