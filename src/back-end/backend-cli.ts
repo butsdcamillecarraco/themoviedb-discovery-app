@@ -56,6 +56,29 @@ program
   });
 
 program
+  .command('update-database')
+  .description('Update movies, genres, and countries from TMDB')
+  .requiredOption('-y, --year <year>', 'release year to synchronize')
+  .option('-p, --path <path>', 'path to the SQLite database file')
+  .action(async ({ year, path }: { year: string; path?: string }) => {
+    const parsedYear = Number(year);
+    if (!/^\d{4}$/.test(year) || !Number.isInteger(parsedYear)) {
+      throw new Error('Year must be a four-digit number');
+    }
+
+    const { updateMoviesDatabase } =
+      await import('./database/update-service.ts');
+    const databasePath = getDatabasePath(path);
+    const database = getDatabase(databasePath);
+    try {
+      const count = await updateMoviesDatabase(database, { year: parsedYear });
+      console.log(`Updated ${count} movies in ${resolve(databasePath)}`);
+    } finally {
+      database.close();
+    }
+  });
+
+program
   .command('clean-genres')
   .description('Remove genres that are not associated with a movie')
   .option('-p, --path <path>', 'path to the SQLite database file')

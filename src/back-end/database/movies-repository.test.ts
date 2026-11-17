@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   findMovieById,
   listMovies,
+  replaceMovieRelations,
   upsertMovies,
   type Movie,
 } from './movies-repository';
@@ -112,6 +113,49 @@ describe('movies repository', () => {
         ...movie,
         release_date: new Date('2021-06-02T00:00:00.000Z'),
       });
+    } finally {
+      database.close();
+    }
+  });
+
+  it('replaces movie relations and removes duplicate identifiers', () => {
+    const database = createDatabase();
+    try {
+      database
+        .prepare('INSERT INTO genres (id, name) VALUES (?, ?)')
+        .run(18, 'Drama');
+      database
+        .prepare('INSERT INTO genres (id, name) VALUES (?, ?)')
+        .run(35, 'Comedy');
+      database
+        .prepare('INSERT INTO countries (code, name) VALUES (?, ?)')
+        .run('FR', 'France');
+      database
+        .prepare('INSERT INTO countries (code, name) VALUES (?, ?)')
+        .run('GB', 'United Kingdom');
+      upsertMovies(database, [firstMovie]);
+      database
+        .prepare('INSERT INTO movie_genres (movie_id, genre_id) VALUES (?, ?)')
+        .run(firstMovie.id, 18);
+      database
+        .prepare(
+          'INSERT INTO production_countries (movie_id, country_code) VALUES (?, ?)',
+        )
+        .run(firstMovie.id, 'FR');
+
+      replaceMovieRelations(
+        database,
+        firstMovie.id,
+        [35, 35],
+        new Set(['GB', 'GB']),
+      );
+
+      expect(database.prepare('SELECT * FROM movie_genres').all()).toEqual([
+        { movie_id: 2, genre_id: 35 },
+      ]);
+      expect(
+        database.prepare('SELECT * FROM production_countries').all(),
+      ).toEqual([{ movie_id: 2, country_code: 'GB' }]);
     } finally {
       database.close();
     }
