@@ -1,0 +1,87 @@
+.dashboard-page {
+  padding-top: 52px;
+}
+
+.dashboard-hero {
+  max-width: 720px;
+  padding-bottom: 42px;
+}
+
+.dashboard-eyebrow {
+  margin: 0 0 10px;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.dashboard-hero h1 {
+  margin: 0;
+  color: var(--heading);
+  font-size: 3.25rem;
+  line-height: 1.04;
+}
+
+.dashboard-intro {
+  max-width: 620px;
+  margin: 20px 0 0;
+  color: var(--text-secondary);
+  font-size: 1.22rem;
+  line-height: 1.55;
+}
+
+.dashboard-empty-state {
+  display: grid;
+  justify-items: center;
+  padding: 64px 24px;
+  border: 1px dashed var(--line);
+  border-radius: 14px;
+  background: var(--surface-muted);
+  text-align: center;
+}
+
+.dashboard-empty-state__icon {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  margin: 0 0 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--surface);
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.dashboard-empty-state h2 {
+  margin: 0;
+  color: var(--ink-strong);
+  font-size: 1.5rem;
+}
+
+.dashboard-empty-state > p:last-child {
+  max-width: 480px;
+  margin: 10px 0 0;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .dashboard-page {
+    padding-top: 34px;
+  }
+
+  .dashboard-hero h1 {
+    font-size: 2.35rem;
+  }
+
+  .dashboard-intro {
+    font-size: 1.05rem;
+  }
+
+  .dashboard-empty-state {
+    padding: 48px 18px;
+  }
+}
