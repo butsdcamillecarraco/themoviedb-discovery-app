@@ -44,6 +44,8 @@ Les paramètres par défaut sont la langue `fr-FR`, la région `FR` et la premi�
 
 Le serveur Express écoute sur le port `3000`. Vite sert l'interface sur le port `5173` et transmet les requêtes `/api` au serveur Express.
 
+Le serveur Node utilise également les variables `HTTP_PROXY`, `HTTPS_PROXY` et `NO_PROXY` si votre réseau nécessite un proxy pour accéder à TMDB.
+
 ## Storybook
 
 Après l'installation des dépendances, démarrez Storybook :
