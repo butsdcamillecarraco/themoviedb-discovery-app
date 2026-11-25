@@ -15,8 +15,8 @@ export type Movie = {
   runtime: number;
   budget: number;
   revenue: number;
-  //   genres : Array<number>;
-  //   production_countries : Array<string>;
+  genres?: number[];
+  production_countries?: string[];
 };
 
 const movieColumns = `
@@ -127,5 +127,34 @@ export function upsertMovies(
       movie.revenue,
       null,
     );
+  }
+}
+
+/**
+ * Replaces the genre and production-country links for a movie.
+ */
+export function replaceMovieRelations(
+  database: DatabaseSync,
+  movieId: number,
+  genreIds: Iterable<number>,
+  countryCodes: Iterable<string>,
+): void {
+  database.prepare('DELETE FROM movie_genres WHERE movie_id = ?').run(movieId);
+  database
+    .prepare('DELETE FROM production_countries WHERE movie_id = ?')
+    .run(movieId);
+
+  const genreStatement = database.prepare(
+    'INSERT INTO movie_genres (movie_id, genre_id) VALUES (?, ?)',
+  );
+  for (const genreId of new Set(genreIds)) {
+    genreStatement.run(movieId, genreId);
+  }
+
+  const countryStatement = database.prepare(
+    'INSERT INTO production_countries (movie_id, country_code) VALUES (?, ?)',
+  );
+  for (const countryCode of new Set(countryCodes)) {
+    countryStatement.run(movieId, countryCode);
   }
 }

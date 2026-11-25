@@ -10,7 +10,6 @@ import { initializeGenresSchema } from './schema';
 
 function createDatabase(): DatabaseSync {
   const database = new DatabaseSync(':memory:');
-  database.exec('CREATE TABLE movies (id INTEGER PRIMARY KEY);');
   initializeGenresSchema(database);
   return database;
 }
