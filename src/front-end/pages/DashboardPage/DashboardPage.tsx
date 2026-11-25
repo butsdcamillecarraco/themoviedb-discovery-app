@@ -1,4 +1,5 @@
 import './DashboardPage.css';
+import AverageRatingWidget from '../../components/AverageRatingWidget/AverageRatingWidget';
 
 export default function DashboardPage() {
   return (
@@ -13,17 +14,10 @@ export default function DashboardPage() {
       </header>
 
       <section
-        className="dashboard-empty-state"
-        aria-labelledby="dashboard-empty-title"
+        className="dashboard-widgets"
+        aria-label="Widgets du tableau de bord"
       >
-        <p className="dashboard-empty-state__icon" aria-hidden="true">
-          +
-        </p>
-        <h2 id="dashboard-empty-title">Aucun widget configuré</h2>
-        <p>
-          Le tableau de bord est prêt à accueillir vos widgets de suivi des
-          films.
-        </p>
+        <AverageRatingWidget state="empty" />
       </section>
     </main>
   );
