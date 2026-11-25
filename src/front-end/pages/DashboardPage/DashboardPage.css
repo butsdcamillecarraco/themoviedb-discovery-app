@@ -31,41 +31,10 @@
   line-height: 1.55;
 }
 
-.dashboard-empty-state {
+.dashboard-widgets {
   display: grid;
-  justify-items: center;
-  padding: 64px 24px;
-  border: 1px dashed var(--line);
-  border-radius: 14px;
-  background: var(--surface-muted);
-  text-align: center;
-}
-
-.dashboard-empty-state__icon {
-  display: grid;
-  width: 52px;
-  height: 52px;
-  place-items: center;
-  margin: 0 0 18px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: var(--surface);
-  font-size: 2rem;
-  font-weight: 400;
-  line-height: 1;
-}
-
-.dashboard-empty-state h2 {
-  margin: 0;
-  color: var(--ink-strong);
-  font-size: 1.5rem;
-}
-
-.dashboard-empty-state > p:last-child {
-  max-width: 480px;
-  margin: 10px 0 0;
-  color: var(--text-muted);
-  line-height: 1.5;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 440px));
+  gap: 20px;
 }
 
 @media (max-width: 600px) {
@@ -79,9 +48,5 @@
 
   .dashboard-intro {
     font-size: 1.05rem;
-  }
-
-  .dashboard-empty-state {
-    padding: 48px 18px;
   }
 }
