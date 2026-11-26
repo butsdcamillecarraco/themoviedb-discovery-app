@@ -7,11 +7,11 @@ import DashboardPage from './DashboardPage';
 afterEach(cleanup);
 
 describe('DashboardPage', () => {
-  it('renders the dashboard with an explicit empty widget state', () => {
-    // Arrange and act: render the dashboard before any widget is configured.
+  it('renders the dashboard with the dominant genre widget', () => {
+    // Arrange and act
     render(<DashboardPage />);
 
-    // Assert: the page remains accessible and explains its empty state.
+    // Assert
     expect(screen.getByRole('main')).toBeTruthy();
     expect(
       screen.getByRole('heading', {
@@ -22,13 +22,11 @@ describe('DashboardPage', () => {
     expect(
       screen.getByRole('heading', {
         level: 2,
-        name: 'Aucun widget configuré',
+        name: 'Genre dominant',
       }),
     ).toBeTruthy();
     expect(
-      screen.getByText(
-        'Le tableau de bord est prêt à accueillir vos widgets de suivi des films.',
-      ),
+      screen.getByText('Aucun genre connu dans le catalogue.'),
     ).toBeTruthy();
   });
 });
