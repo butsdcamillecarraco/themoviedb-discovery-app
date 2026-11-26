@@ -43,6 +43,7 @@ Les paramètres par défaut sont la langue `fr-FR`, la région `FR` et la premi�
 4. Ouvrez [http://localhost:5173](http://localhost:5173).
 
 Le serveur Express écoute sur le port `3000`. Vite sert l'interface sur le port `5173` et transmet les requêtes `/api` au serveur Express.
+Le serveur Node utilise les variables `HTTP_PROXY`, `HTTPS_PROXY` et `NO_PROXY` pour les connexions sortantes vers TMDB.
 
 ## Storybook
 
