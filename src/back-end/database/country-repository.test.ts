@@ -10,7 +10,6 @@ import { initializeCountriesSchema } from './schema';
 
 function createDatabase(): DatabaseSync {
   const database = new DatabaseSync(':memory:');
-  database.exec('CREATE TABLE movies (code STRING PRIMARY KEY);');
   initializeCountriesSchema(database);
   return database;
 }

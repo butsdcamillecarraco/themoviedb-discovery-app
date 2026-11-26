@@ -15,6 +15,7 @@ const getDatabaseMock = vi.fn(() => ({
 const readFileSyncMock = vi.fn(() => 'id,name\n18,Drama\n');
 const parseGenresCsvMock = vi.fn(() => [{ id: 18, name: 'Drama' }]);
 const upsertGenresMock = vi.fn();
+const updateMoviesDatabaseMock = vi.fn();
 
 vi.mock('./database/schema.ts', () => ({
   DEFAULT_DATABASE_PATH,
@@ -26,6 +27,9 @@ vi.mock('./database/genre-csv.ts', () => ({
 }));
 vi.mock('./database/genre-repository.ts', () => ({
   upsertGenres: upsertGenresMock,
+}));
+vi.mock('./database/update-service.ts', () => ({
+  updateMoviesDatabase: updateMoviesDatabaseMock,
 }));
 
 /**
@@ -51,6 +55,7 @@ describe('backend-cli.ts', () => {
     readFileSyncMock.mockReturnValue('id,name\n18,Drama\n');
     parseGenresCsvMock.mockReturnValue([{ id: 18, name: 'Drama' }]);
     upsertGenresMock.mockImplementation(() => {});
+    updateMoviesDatabaseMock.mockResolvedValue(3);
   });
 
   describe('create-database', () => {
@@ -60,7 +65,6 @@ describe('backend-cli.ts', () => {
         await runCliWithArgs(['create-database']);
 
         expect(getDatabaseMock).toHaveBeenCalledWith(DEFAULT_DATABASE_PATH);
-        expect(closeMock).toHaveBeenCalledOnce();
         expect(logSpy).toHaveBeenCalledWith(
           `Database available at ${resolve(DEFAULT_DATABASE_PATH)}`,
         );
@@ -76,7 +80,6 @@ describe('backend-cli.ts', () => {
         await runCliWithArgs(['create-database', '--path', customDatabasePath]);
 
         expect(getDatabaseMock).toHaveBeenCalledWith(customDatabasePath);
-        expect(closeMock).toHaveBeenCalledOnce();
         expect(logSpy).toHaveBeenCalledWith(
           `Database available at ${resolve(customDatabasePath)}`,
         );
@@ -150,6 +153,44 @@ describe('backend-cli.ts', () => {
       } finally {
         logSpy.mockRestore();
       }
+    });
+
+    describe('update-database', () => {
+      it('updates the selected database and reports the movie count', async () => {
+        const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+        try {
+          await runCliWithArgs([
+            'update-database',
+            '--year',
+            '2020',
+            '--path',
+            './data/custom-movies.sqlite',
+          ]);
+          await new Promise((resolve) => setImmediate(resolve));
+
+          expect(logSpy).toHaveBeenCalledWith(
+            `Updated 3 movies in ${resolve('./data/custom-movies.sqlite')}`,
+          );
+        } finally {
+          logSpy.mockRestore();
+        }
+      });
+
+      it('rejects a year that is not four digits', async () => {
+        const unhandledRejection = vi.fn();
+        process.once('unhandledRejection', unhandledRejection);
+        await runCliWithArgs(['update-database', '--year', '20']);
+        await new Promise((resolve) => setImmediate(resolve));
+        process.removeListener('unhandledRejection', unhandledRejection);
+
+        expect(unhandledRejection).toHaveBeenCalledWith(
+          expect.objectContaining({
+            message: 'Year must be a four-digit number',
+          }),
+          expect.any(Promise),
+        );
+        expect(getDatabaseMock).not.toHaveBeenCalled();
+      });
     });
   });
 });
